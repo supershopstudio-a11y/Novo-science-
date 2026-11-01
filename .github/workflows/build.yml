@@ -1,0 +1,22 @@
+name: Build website
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -q novo-science-ready.zip -d app
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+        working-directory: app
+      - run: npm run build
+        working-directory: app
+      - uses: actions/upload-artifact@v4
+        with:
+          name: website
+          path: app/dist
+          include-hidden-files: true
